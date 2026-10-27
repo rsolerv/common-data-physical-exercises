@@ -1,0 +1,70 @@
+{
+    "version": 1,
+    "ejercicios": [],
+    "categorias": [
+        {
+            "id": "7e22bbf4-7be3-43a5-bef3-6bade4b9f80d",
+            "nombre": "Abdomen"
+        },
+        {
+            "id": "4245bb59-bd52-4e42-bb00-653096605f72",
+            "nombre": "Brazos"
+        },
+        {
+            "id": "3ae97338-8935-4ba9-8a9a-59d57f1ebf7c",
+            "nombre": "Cadera"
+        },
+        {
+            "id": "21b28a83-c996-4fbe-88ea-d76c6ca29115",
+            "nombre": "Cervicales"
+        },
+        {
+            "id": "d66cd666-7164-4e25-9563-6a2a33a1ca15",
+            "nombre": "Cuello"
+        },
+        {
+            "id": "6c13696e-c063-4c64-884c-b2a4204c0c64",
+            "nombre": "Dorsales"
+        },
+        {
+            "id": "3862e4f6-1b85-42ab-b5bb-67efa6faf02b",
+            "nombre": "Espalda"
+        },
+        {
+            "id": "4aa7b730-f213-4772-9455-c332dcb23f7b",
+            "nombre": "Glúteo"
+        },
+        {
+            "id": "04d6ec2b-4b7d-46d1-be68-891704a6ada8",
+            "nombre": "Hombros"
+        },
+        {
+            "id": "92a0c2a6-7bbc-47a2-9fcd-a1181ff087fb",
+            "nombre": "Isquiotibiales"
+        },
+        {
+            "id": "89ea692c-7b7f-4430-883b-431f8dede4ba",
+            "nombre": "Lumbares"
+        },
+        {
+            "id": "08b2dca2-1616-4363-a547-8eb88148c3bd",
+            "nombre": "Pecho"
+        },
+        {
+            "id": "6706d2d3-bff9-4790-80f9-52e3ef709fc8",
+            "nombre": "Piernas"
+        },
+        {
+            "id": "35d1d872-3b50-4bf8-8470-8247f71c4e9d",
+            "nombre": "Pié"
+        },
+        {
+            "id": "7e0d9fe7-5dbe-4ed9-bd9d-b40374d3f998",
+            "nombre": "Rodilla"
+        }
+    ],
+    "planificaciones": [
+    ],
+    "progresoDiario": [
+    ]
+}
