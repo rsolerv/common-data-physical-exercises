@@ -1,0 +1,39 @@
+name: Create Pull Request
+
+on:
+  push:
+    branches:
+      - requests
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING_PR=$(gh pr list \
+            --base main \
+            --head requests \
+            --state open \
+            --json number \
+            --jq 'length')
+
+          if [ "$EXISTING_PR" -gt 0 ]; then
+            echo "Ya existe un PR abierto"
+            exit 0
+          fi
+
+          gh pr create \
+            --base main \
+            --head requests \
+            --title "Sincronización automática" \
+            --body "Pull Request generado automáticamente"
