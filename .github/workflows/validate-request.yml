@@ -29,7 +29,7 @@ jobs:
               exit 1
             fi
 
-            if [ "$FILE" = "datos.json" ]; then
+            if [[ "$FILE" =~ ^ejercicios/.*\.json$ ]]; then
               continue
             fi
 
