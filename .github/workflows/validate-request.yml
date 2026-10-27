@@ -38,6 +38,16 @@ jobs:
             fi
 
             echo "Archivo no permitido: $FILE"
+            
+      - name: Validate JSON
+        run: |
+
+          for file in $(find . -name "*.json")
+          do
+
+              jq empty "$file" || exit 1
+
+          done            
             exit 1
 
           done <<< "$CHANGED"
