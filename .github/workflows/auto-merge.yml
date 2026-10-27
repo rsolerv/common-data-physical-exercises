@@ -2,6 +2,7 @@ name: Auto Merge
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - main
 
@@ -17,6 +18,7 @@ jobs:
 
     steps:
       - name: Auto merge
-        run: gh pr merge ${{ github.event.pull_request.number }} --squash --auto
+        # Require "Validate Request / validate" in main's branch protection so --auto waits for validation.
+        run: gh pr merge ${{ github.event.pull_request.number }} --repo "${{ github.repository }}" --squash --auto
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
