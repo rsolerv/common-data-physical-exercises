@@ -1,0 +1,43 @@
+name: Validate Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch branches
+        run: |
+          git fetch origin main
+
+      - name: Validate changes
+        run: |
+
+          CHANGED=$(git diff --name-status origin/main...HEAD)
+
+          while read STATUS FILE
+          do
+
+            if [ "$STATUS" = "D" ]; then
+              echo "No se permite borrar archivos"
+              exit 1
+            fi
+
+            if [ "$FILE" = "datos.json" ]; then
+              continue
+            fi
+
+            if [[ "$FILE" =~ ^imagenes/.*\.json$ ]]; then
+              continue
+            fi
+
+            echo "Archivo no permitido: $FILE"
+            exit 1
+
+          done <<< "$CHANGED"
