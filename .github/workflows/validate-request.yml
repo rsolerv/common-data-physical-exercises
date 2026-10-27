@@ -11,10 +11,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Fetch branches
-        run: |
-          git fetch origin main
+        run: git fetch origin main
 
       - name: Validate changes
         run: |
@@ -23,7 +24,6 @@ jobs:
 
           while read STATUS FILE
           do
-
             if [ "$STATUS" = "D" ]; then
               echo "No se permite borrar archivos"
               exit 1
@@ -38,22 +38,21 @@ jobs:
             fi
 
             echo "Archivo no permitido: $FILE"
-            
+            exit 1
+
+          done <<< "$CHANGED"
+
       - name: Validate JSON
         run: |
 
-          COUNT=$(git diff --name-only origin/main...HEAD | wc -l)          
-          if [ "$COUNT" -gt 20 ]
-          then
-             exit 1
+          COUNT=$(git diff --name-only origin/main...HEAD | wc -l)
+
+          if [ "$COUNT" -gt 20 ]; then
+            echo "Demasiados archivos modificados"
+            exit 1
           fi
 
           for file in $(find . -name "*.json")
           do
-
-              jq empty "$file" || exit 1
-
-          done            
-            exit 1
-
-          done <<< "$CHANGED"
+            jq empty "$file" || exit 1
+          done
