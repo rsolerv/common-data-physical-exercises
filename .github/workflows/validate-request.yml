@@ -3,7 +3,7 @@ name: Validate Request
 on:
   push:
     branches:
-      - request
+      - requests
 
 jobs:
   validate:
