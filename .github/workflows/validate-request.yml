@@ -29,6 +29,10 @@ jobs:
               exit 1
             fi
 
+            if [[ "$FILE" =~ ^categorias.json$ ]]; then
+              continue
+            fi
+
             if [[ "$FILE" =~ ^ejercicios/.*\.json$ ]]; then
               continue
             fi
