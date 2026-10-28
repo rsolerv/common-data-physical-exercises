@@ -5,58 +5,119 @@ on:
     branches:
       - requests
 
+permissions:
+  contents: read
+
 jobs:
   validate:
+    name: Validate request files
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout request branch
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Fetch branches
+      - name: Fetch main branch
         run: git fetch origin main
 
-      - name: Validate changes
+      - name: Validate changed files
+        shell: bash
         run: |
+          set -euo pipefail
 
-          CHANGED=$(git diff --name-status origin/main...HEAD)
+          mapfile -d '' CHANGES < <(
+            git diff \
+              --name-status \
+              -z \
+              --find-renames \
+              origin/main...HEAD
+          )
 
-          while read STATUS FILE
-          do
-            if [ "$STATUS" = "D" ]; then
-              echo "No se permite borrar archivos"
+          FILE_COUNT=0
+          INDEX=0
+
+          while [ "$INDEX" -lt "${#CHANGES[@]}" ]; do
+            STATUS="${CHANGES[$INDEX]}"
+            INDEX=$((INDEX + 1))
+
+            # En renombrados y copias, Git devuelve ruta antigua y nueva.
+            if [[ "$STATUS" == R* || "$STATUS" == C* ]]; then
+              OLD_FILE="${CHANGES[$INDEX]}"
+              NEW_FILE="${CHANGES[$((INDEX + 1))]}"
+              INDEX=$((INDEX + 2))
+
+              echo "No se permite renombrar o copiar archivos:"
+              echo "Origen: $OLD_FILE"
+              echo "Destino: $NEW_FILE"
               exit 1
             fi
 
-            if [[ "$FILE" =~ ^categorias.json$ ]]; then
-              continue
+            FILE="${CHANGES[$INDEX]}"
+            INDEX=$((INDEX + 1))
+            FILE_COUNT=$((FILE_COUNT + 1))
+
+            echo "Validando cambio: $STATUS $FILE"
+
+            if [ "$STATUS" = "D" ]; then
+              echo "No se permite borrar archivos: $FILE"
+              exit 1
             fi
 
-            if [[ "$FILE" =~ ^ejercicios/.*\.json$ ]]; then
-              continue
-            fi
+            case "$FILE" in
+              categorias.json)
+                ;;
 
-            if [[ "$FILE" =~ ^imagenes/.*\.json$ ]]; then
-              continue
-            fi
+              ejercicios/*.json)
+                ;;
 
-            echo "Archivo no permitido: $FILE"
-            exit 1
+              imagenes/*.json)
+                ;;
 
-          done <<< "$CHANGED"
+              *)
+                echo "Archivo no permitido: $FILE"
+                exit 1
+                ;;
+            esac
+          done
 
-      - name: Validate JSON
-        run: |
+          if [ "$FILE_COUNT" -eq 0 ]; then
+            echo "No hay diferencias entre request y main"
+            exit 0
+          fi
 
-          COUNT=$(git diff --name-only origin/main...HEAD | wc -l)
-
-          if [ "$COUNT" -gt 20 ]; then
-            echo "Demasiados archivos modificados"
+          if [ "$FILE_COUNT" -gt 20 ]; then
+            echo "Demasiados archivos modificados: $FILE_COUNT"
+            echo "El máximo permitido es 20"
             exit 1
           fi
 
-          for file in $(find . -name "*.json")
-          do
-            jq empty "$file" || exit 1
-          done
+          echo "Número de archivos modificados: $FILE_COUNT"
+
+      - name: Validate changed JSON files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          while IFS= read -r -d '' FILE; do
+            if [ ! -f "$FILE" ]; then
+              continue
+            fi
+
+            echo "Validando JSON: $FILE"
+
+            if ! jq empty "$FILE"; then
+              echo "JSON inválido: $FILE"
+              exit 1
+            fi
+          done < <(
+            git diff \
+              --name-only \
+              --diff-filter=AM \
+              -z \
+              origin/main...HEAD \
+              -- "*.json"
+          )
+
+          echo "Todos los archivos JSON modificados son válidos"
