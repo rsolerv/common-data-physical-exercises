@@ -16,7 +16,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check pending commits
+        id: check
+        run: |
+          git fetch origin main requests
+      
+          COMMITS=$(git rev-list --count origin/main..origin/requests)
+      
+          echo "commits=$COMMITS" >> $GITHUB_OUTPUT
+      
+
       - name: Create Pull Request
+        if: steps.check.outputs.commits != '0'      
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
