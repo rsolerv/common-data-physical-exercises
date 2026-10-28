@@ -35,6 +35,15 @@ jobs:
             exit 0
           fi
 
+          CHANGED_FILE_COUNT=$(gh api \
+            "repos/$GH_REPO/compare/main...requests" \
+            --jq '.files | length')
+
+          if [ "$CHANGED_FILE_COUNT" -eq 0 ]; then
+            echo "No hay archivos diferentes entre requests y main; no se crea un PR vacío"
+            exit 0
+          fi
+
           EXISTING_PR=$(gh pr list \
             --repo "$GH_REPO" \
             --base main \
