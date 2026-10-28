@@ -65,18 +65,17 @@ jobs:
               exit 1
             fi
 
+            if [ "$STATUS" != "A" ] && [ "$STATUS" != "M" ]; then
+              echo "Tipo de cambio no permitido: $STATUS $FILE"
+              exit 1
+            fi
+
             case "$FILE" in
-              categorias.json)
-                ;;
-
-              ejercicios/*.json)
-                ;;
-
-              imagenes/*.json)
+              ejercicios/*.json|imagenes/*.json)
                 ;;
 
               *)
-                echo "Archivo no permitido: $FILE"
+                echo "Solo se permiten archivos JSON en ejercicios/ o imagenes/: $FILE"
                 exit 1
                 ;;
             esac

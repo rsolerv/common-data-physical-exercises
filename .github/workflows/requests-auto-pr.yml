@@ -14,7 +14,8 @@ jobs:
   create-pr:
     if: >
       github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == 'requests'
+      github.event.workflow_run.head_branch == 'requests' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
 
     runs-on: ubuntu-latest
 
@@ -23,7 +24,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
           GH_REPO: ${{ github.repository }}
+          VALIDATED_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
+          CURRENT_SHA=$(gh api \
+            "repos/$GH_REPO/branches/requests" \
+            --jq '.commit.sha')
+
+          if [ "$CURRENT_SHA" != "$VALIDATED_SHA" ]; then
+            echo "La rama requests avanzó después de la validación; se omite este PR"
+            exit 0
+          fi
+
           EXISTING_PR=$(gh pr list \
             --repo "$GH_REPO" \
             --base main \

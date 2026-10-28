@@ -7,7 +7,9 @@ on:
 
 jobs:
   merge:
-    if: github.event.pull_request.head.ref == 'requests'
+    if: >
+      github.event.pull_request.head.ref == 'requests' &&
+      github.event.pull_request.head.repo.full_name == github.repository
 
     runs-on: ubuntu-latest
 
@@ -17,6 +19,8 @@ jobs:
 
     steps:
       - name: Auto merge
-        run: gh pr merge ${{ github.event.pull_request.number }} --repo "${{ github.repository }}" --squash --auto
+        run: gh pr merge "$PR_NUMBER" --repo "$GH_REPO" --squash --auto
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
