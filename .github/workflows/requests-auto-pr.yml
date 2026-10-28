@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Create pull request
         env:
-          GH_TOKEN: ${{ secrets.USER_PAT }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
           EXISTING_PR=$(gh pr list \
