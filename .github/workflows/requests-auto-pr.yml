@@ -1,50 +1,44 @@
 name: Create Pull Request
 
 on:
-  push:
-    branches:
-      - requests
+  workflow_run:
+    workflows:
+      - Validate Request
+    types:
+      - completed
+
+permissions:
+  contents: read
 
 jobs:
   create-pr:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'requests'
+
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Check pending commits
-        id: check
-        run: |
-          git fetch origin main requests
-      
-          COMMITS=$(git rev-list --count origin/main..origin/requests)
-      
-          echo "commits=$COMMITS" >> $GITHUB_OUTPUT
-      
-
-      - name: Create Pull Request
-        if: steps.check.outputs.commits != '0'      
+      - name: Create pull request
         env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_TOKEN: ${{ secrets.USER_PAT }}
+          GH_REPO: ${{ github.repository }}
         run: |
           EXISTING_PR=$(gh pr list \
+            --repo "$GH_REPO" \
             --base main \
             --head requests \
             --state open \
             --json number \
             --jq 'length')
 
-          if [ "$EXISTING_PR" -gt 0 ]; then
-            echo "Ya existe un PR abierto"
-            exit 0
+          if [ "$EXISTING_PR" -eq 0 ]; then
+            gh pr create \
+              --repo "$GH_REPO" \
+              --base main \
+              --head requests \
+              --title "Actualizar ejercicios" \
+              --body "Pull Request creado automáticamente."
+          else
+            echo "Ya existe un Pull Request abierto"
           fi
-
-          gh pr create \
-            --base main \
-            --head requests \
-            --title "Sincronización automática" \
-            --body "Pull Request generado automáticamente"
