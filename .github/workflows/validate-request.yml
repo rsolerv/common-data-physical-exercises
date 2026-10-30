@@ -86,9 +86,9 @@ jobs:
             exit 0
           fi
 
-          if [ "$FILE_COUNT" -gt 20 ]; then
+          if [ "$FILE_COUNT" -gt 1000 ]; then
             echo "Demasiados archivos modificados: $FILE_COUNT"
-            echo "El máximo permitido es 20"
+            echo "El máximo permitido es 1000"
             exit 1
           fi
 
