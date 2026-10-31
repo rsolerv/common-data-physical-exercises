@@ -38,6 +38,22 @@ jobs:
           FILE_COUNT=0
           INDEX=0
 
+          UUID_PATTERN='[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+
+          is_legacy_file() {
+            [[ "$1" =~ ^ejercicios/$UUID_PATTERN\.json$ || "$1" =~ ^imagenes/$UUID_PATTERN\.json$ ]]
+          }
+
+          is_new_file() {
+            local FILE="$1"
+
+            if [[ "$FILE" =~ ^ejercicios/($UUID_PATTERN)/($UUID_PATTERN)\.json$ ]]; then
+              [[ "${BASH_REMATCH[1]}" == "${BASH_REMATCH[2]}" ]]
+            else
+              [[ "$FILE" =~ ^ejercicios/$UUID_PATTERN/imagenes/$UUID_PATTERN\.json$ ]]
+            fi
+          }
+
           while [ "$INDEX" -lt "${#CHANGES[@]}" ]; do
             STATUS="${CHANGES[$INDEX]}"
             INDEX=$((INDEX + 1))
@@ -48,7 +64,13 @@ jobs:
               NEW_FILE="${CHANGES[$((INDEX + 1))]}"
               INDEX=$((INDEX + 2))
 
-              echo "No se permite renombrar o copiar archivos:"
+              if [[ "$STATUS" == R* ]] && is_legacy_file "$OLD_FILE" && is_new_file "$NEW_FILE"; then
+                FILE_COUNT=$((FILE_COUNT + 1))
+                echo "Validando renombrado: $OLD_FILE -> $NEW_FILE"
+                continue
+              fi
+
+              echo "No se permite copiar este archivo ni realizar este renombrado:"
               echo "Origen: $OLD_FILE"
               echo "Destino: $NEW_FILE"
               exit 1
@@ -70,15 +92,10 @@ jobs:
               exit 1
             fi
 
-            case "$FILE" in
-              ejercicios/*.json|imagenes/*.json)
-                ;;
-
-              *)
-                echo "Solo se permiten archivos JSON en ejercicios/ o imagenes/: $FILE"
-                exit 1
-                ;;
-            esac
+            if [[ "$FILE" != "categorias.json" ]] && ! is_legacy_file "$FILE" && ! is_new_file "$FILE"; then
+              echo "Solo se permiten categorias.json y archivos JSON de ejercicios/imágenes en la estructura admitida: $FILE"
+              exit 1
+            fi
           done
 
           if [ "$FILE_COUNT" -eq 0 ]; then
@@ -113,7 +130,7 @@ jobs:
           done < <(
             git diff \
               --name-only \
-              --diff-filter=AM \
+              --diff-filter=AMR \
               -z \
               origin/main...HEAD \
               -- "*.json"

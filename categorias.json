@@ -3,63 +3,126 @@
     "categorias": [
         {
             "id": "7e22bbf4-7be3-43a5-bef3-6bade4b9f80d",
-            "nombre": "Abdomen"
+            "nombre": "Abdomen",
+            "ejercicios": [
+                "9a21f77d-04ff-43e0-b6a2-45de6c656d69",
+                "dcb3ad6b-3f9a-4f8d-b597-9193c0f45ae6"
+            ]
         },
         {
             "id": "4245bb59-bd52-4e42-bb00-653096605f72",
-            "nombre": "Brazos"
+            "nombre": "Brazos",
+            "ejercicios": [
+                "458d67b0-0164-4a40-aa3e-4f5c2d905176",
+                "76619282-4ffa-421d-83f3-6d5a5a66e921",
+                "959431b5-d30f-4a08-8b9a-430d441ebe89"
+            ]
         },
         {
             "id": "3ae97338-8935-4ba9-8a9a-59d57f1ebf7c",
-            "nombre": "Cadera"
+            "nombre": "Cadera",
+            "ejercicios": [
+                "38e94d85-42fb-4508-a6d4-6ebf03d67c1b",
+                "64bc9368-b117-4c23-83f3-861e0b668906"
+            ]
         },
         {
             "id": "21b28a83-c996-4fbe-88ea-d76c6ca29115",
-            "nombre": "Cervicales"
+            "nombre": "Cervicales",
+            "ejercicios": [
+                "f4e710a7-0fa1-4105-a170-351fff54b201"
+            ]
         },
         {
             "id": "d66cd666-7164-4e25-9563-6a2a33a1ca15",
-            "nombre": "Cuello"
+            "nombre": "Cuello",
+            "ejercicios": [
+                "f4e710a7-0fa1-4105-a170-351fff54b201"
+            ]
         },
         {
             "id": "6c13696e-c063-4c64-884c-b2a4204c0c64",
-            "nombre": "Dorsales"
+            "nombre": "Dorsales",
+            "ejercicios": [
+                "5565b6a6-29a0-4d26-a6a4-4350ec2a7220",
+                "9026d657-0cc7-47de-ac26-ac802198d8c0",
+                "959431b5-d30f-4a08-8b9a-430d441ebe89"
+            ]
         },
         {
             "id": "3862e4f6-1b85-42ab-b5bb-67efa6faf02b",
-            "nombre": "Espalda"
+            "nombre": "Espalda",
+            "ejercicios": [
+                "5565b6a6-29a0-4d26-a6a4-4350ec2a7220",
+                "9026d657-0cc7-47de-ac26-ac802198d8c0",
+                "959431b5-d30f-4a08-8b9a-430d441ebe89",
+                "f4e710a7-0fa1-4105-a170-351fff54b201"
+            ]
         },
         {
             "id": "4aa7b730-f213-4772-9455-c332dcb23f7b",
-            "nombre": "Glúteo"
+            "nombre": "Glúteo",
+            "ejercicios": [
+                "019a012c-e863-4f6d-b71e-e49e1958526c",
+                "38e94d85-42fb-4508-a6d4-6ebf03d67c1b",
+                "64bc9368-b117-4c23-83f3-861e0b668906",
+                "78f97192-10dd-46d0-a879-4addf9ebe80d",
+                "feb6c09f-19db-48a1-abd8-71d5d6666599"
+            ]
         },
         {
             "id": "04d6ec2b-4b7d-46d1-be68-891704a6ada8",
-            "nombre": "Hombros"
+            "nombre": "Hombros",
+            "ejercicios": [
+                "76619282-4ffa-421d-83f3-6d5a5a66e921"
+            ]
         },
         {
             "id": "92a0c2a6-7bbc-47a2-9fcd-a1181ff087fb",
-            "nombre": "Isquiotibiales"
+            "nombre": "Isquiotibiales",
+            "ejercicios": [
+                "019a012c-e863-4f6d-b71e-e49e1958526c",
+                "38e94d85-42fb-4508-a6d4-6ebf03d67c1b",
+                "78f97192-10dd-46d0-a879-4addf9ebe80d"
+            ]
         },
         {
             "id": "89ea692c-7b7f-4430-883b-431f8dede4ba",
-            "nombre": "Lumbares"
+            "nombre": "Lumbares",
+            "ejercicios": [
+                "8138057e-1d8c-4464-81f1-6c073da6b6c8",
+                "ec7a02fd-7fc6-4b89-a9aa-1d5c5543ae58"
+            ]
         },
         {
             "id": "08b2dca2-1616-4363-a547-8eb88148c3bd",
-            "nombre": "Pecho"
+            "nombre": "Pecho",
+            "ejercicios": [
+                "9a21f77d-04ff-43e0-b6a2-45de6c656d69"
+            ]
         },
         {
             "id": "6706d2d3-bff9-4790-80f9-52e3ef709fc8",
-            "nombre": "Piernas"
+            "nombre": "Piernas",
+            "ejercicios": [
+                "78f97192-10dd-46d0-a879-4addf9ebe80d",
+                "9a21f77d-04ff-43e0-b6a2-45de6c656d69",
+                "e675ef69-ba16-4c57-a8de-43ae2c30f539",
+                "feb6c09f-19db-48a1-abd8-71d5d6666599"
+            ]
         },
         {
             "id": "35d1d872-3b50-4bf8-8470-8247f71c4e9d",
-            "nombre": "Pié"
+            "nombre": "Pié",
+            "ejercicios": []
         },
         {
             "id": "7e0d9fe7-5dbe-4ed9-bd9d-b40374d3f998",
-            "nombre": "Rodilla"
+            "nombre": "Rodilla",
+            "ejercicios": [
+                "e675ef69-ba16-4c57-a8de-43ae2c30f539",
+                "feb6c09f-19db-48a1-abd8-71d5d6666599"
+            ]
         }
     ]
 }
