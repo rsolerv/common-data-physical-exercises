@@ -23,7 +23,9 @@ jobs:
         run: git fetch origin main
 
       - name: Validate changed files
-        shell: bash
+        env:
+          REQUEST_ACTOR: ${{ github.actor }}          
+        shell: bash    
         run: |
           set -euo pipefail
 
@@ -54,6 +56,10 @@ jobs:
             fi
           }
 
+          is_deletable_file() {
+            is_new_file "$1"
+          }          
+
           while [ "$INDEX" -lt "${#CHANGES[@]}" ]; do
             STATUS="${CHANGES[$INDEX]}"
             INDEX=$((INDEX + 1))
@@ -83,8 +89,17 @@ jobs:
             echo "Validando cambio: $STATUS $FILE"
 
             if [ "$STATUS" = "D" ]; then
-              echo "No se permite borrar archivos: $FILE"
-              exit 1
+              if [ "$REQUEST_ACTOR" != "rsolerv" ]; then
+                echo "Solo rsolerv puede borrar archivos: $FILE"
+                exit 1
+              fi
+
+              if ! is_deletable_file "$FILE"; then
+                echo "No se permite borrar esta ruta: $FILE"
+                exit 1
+              fi
+
+              continue
             fi
 
             if [ "$STATUS" != "A" ] && [ "$STATUS" != "M" ]; then
